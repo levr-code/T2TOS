@@ -75,7 +75,7 @@ class SandBox:
                 self.__history = self.__history[-200:]
             if len(com)>0 and "import" not in str(com):
                 def checkcommand(a:str,/,userss=False):
-                    print(f"{request.remote_addr} - checkcommand - {a}")
+                    print(f"{ip()} - checkcommand - {a}")
                     QUOTES = [
                         "The best way to predict the future is to invent it. – Alan Kay",
                         "Do not wait to strike till the iron is hot; but make it hot by striking. – William Butler Yeats",
@@ -176,11 +176,11 @@ class SandBox:
                         else:
                             a=str(a).replace(f"<{i}>",str(self.__files[i]))
                     def addtochat(text:str):
-                        print(f"{request.remote_addr} - addtochat - {text}")
+                        print(f"{ip()} - addtochat - {text}")
                         self.__chat.pop(0)
                         self.__chat.append(str(text))
                     def say(text:str):
-                        print(f"{request.remote_addr} - say - {text}")
+                        print(f"{ip()} - say - {text}")
                         self.__usersees.pop(0)
                         self.__usersees.append(str(text))
                     if userss:
@@ -449,27 +449,33 @@ class SandBox:
                             self.__files[a.split("=")[0][1:]]=typeWithoutfile(a.split("=")[0][1:])+self.__chat[-1]
                 checkcommand(com)
                 return True
-
+def ip()  
+    forwarded_for = request.headers.get("X-Forwarded-For")
+    if forwarded_for:
+        user_ip = forwarded_for.split(",")[0].strip()
+    else:
+        user_ip = request.remote_addr
+    return user_ip
 ############################################################
 #                          T2TOS                           #
 ############################################################
 @app.route('/T2TOS/exception')
 def a21():
-    if request.remote_addr not in sandboxes:
-        sandboxes.setdefault(request.remote_addr,SandBox())
+    if ip() not in sandboxes:
+        sandboxes.setdefault(ip(),SandBox())
     return render_template("button.html",text="Your T2TOS run into a problem :(",button_name="back",button_href="/T2TOS")
 @app.route('/T2TOS')
 def a20():
-    if request.remote_addr not in sandboxes:
-        sandboxes.setdefault(request.remote_addr,SandBox())
-    return render_template("list.html",theme=sandboxes[request.remote_addr].theme,chat=sandboxes[request.remote_addr].chat,title="T2TOS",text="T2TOS")
+    if ip() not in sandboxes:
+        sandboxes.setdefault(ip(),SandBox())
+    return render_template("list.html",theme=sandboxes[ip()].theme,chat=sandboxes[ip()].chat,title="T2TOS",text="T2TOS")
 @app.route("/redir", methods=["POST","GET"])
 def check_page():
     try:
         p = request.form.get("command", "")
-        if request.remote_addr not in sandboxes:
-            sandboxes.setdefault(request.remote_addr,SandBox())
-        sandboxes[request.remote_addr].safeCommand(p)
+        if ip() not in sandboxes:
+            sandboxes.setdefault(ip(),SandBox())
+        sandboxes[ip()].safeCommand(p)
     except:
         return redirect("/T2TOS/exception")
     return redirect("/T2TOS")
