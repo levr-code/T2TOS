@@ -10,6 +10,13 @@ T2TOS_COMMANDS = [
     "/pow","/hello","/item","/ask","/pi","/space","/joke","/file.copy","/theme.black","/theme.hacker","in","/theme.cyberpunk","/theme.forest","/theme.sunset","/theme.ocean","/theme.retro","/theme.pastel","/theme.galaxy","/theme.matrix","/theme.sunrise","/theme.twilight","/theme.cyberforest","/lib.get","/lib.save",
     "/try","/for","/thread","/range","/file.all","/desktop","/theme.","/mode.v2","/mode.v1","/theme.light","/theme.red-light","/theme.blue","/theme.light-red","/theme.red","/theme.dark","/theme.vscode","/theme.vscode-hc","/theme.pycharm","/q","/theme.BLACK"
 ]
+def ip():  
+    forwarded_for = request.headers.get("X-Forwarded-For")
+    if forwarded_for:
+        user_ip = forwarded_for.split(",")[0].strip()
+    else:
+        user_ip = request.remote_addr
+    return user_ip
 @app.template_filter('highlight_t2tos')
 def highlight_t2tos(text):
     import re
@@ -449,13 +456,6 @@ class SandBox:
                             self.__files[a.split("=")[0][1:]]=typeWithoutfile(a.split("=")[0][1:])+self.__chat[-1]
                 checkcommand(com)
                 return True
-def ip()  
-    forwarded_for = request.headers.get("X-Forwarded-For")
-    if forwarded_for:
-        user_ip = forwarded_for.split(",")[0].strip()
-    else:
-        user_ip = request.remote_addr
-    return user_ip
 ############################################################
 #                          T2TOS                           #
 ############################################################
