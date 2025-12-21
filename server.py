@@ -178,11 +178,11 @@ class SandBox:
                     def addtochat(text:str):
                         print(f"{request.remote_addr} - addtochat - {text}")
                         self.__chat.pop(0)
-                        self.__chat.append(text)
+                        self.__chat.append(str(text))
                     def say(text:str):
                         print(f"{request.remote_addr} - say - {text}")
                         self.__usersees.pop(0)
-                        self.__usersees.append(text)
+                        self.__usersees.append(str(text))
                     if userss:
                         def addtochat(text:str):
                             say(text)
