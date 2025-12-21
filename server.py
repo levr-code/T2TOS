@@ -243,7 +243,7 @@ class SandBox:
                         elif a[:10]=="/lib.save[":
                             if a[10:].split("]")[0][:4]=="lib/":
                                 s=a[10:].split("]")
-                                global_lib.setdefault("]".join(s[1:]),s[0])
+                                global_lib.setdefault(s[1],s[0])
                         elif a[:11]=="/file.save[":
                             s=a[11:].split("]")
                             self.__files.setdefault("]".join(s[1:]),s[0])
