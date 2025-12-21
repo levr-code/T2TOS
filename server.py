@@ -1,5 +1,5 @@
 from flask import Flask,render_template,request,redirect
-import random,Mod
+import random
 app=Flask(__name__)
 global_lib={}
 mem=""
@@ -194,7 +194,6 @@ class SandBox:
                                 a=str(a).replace(f"<{i}>",str(self.__files[i][4:]))
                         if a=="/chat.clean" or a=="/chat.clear":
                             self.__chat=[""]*40
-                            Mod.consoleclear()
                         elif a=="/mode.v2":
                             addtochat("this is an experemental extention for T2TOS")
                             self.__mode="v2"
