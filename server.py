@@ -465,7 +465,7 @@ class SandBox:
 @app.route('/T2TOS/login')
 def a291():
     return render_template("auth.html",)
-@app.route('/T2TOS/login/done')
+@app.route('/T2TOS/login/done',methods=["POST"])
 def a292():
     name = request.form.get("user", "")
     p = request.form.get("pass", "")
@@ -476,6 +476,10 @@ def a292():
         return redirect("/T2TOS")
     else:
         return redirect("/T2TOS/login")
+@app.route('/')
+def a292():
+    return redirect("/T2TOS")
+
 @app.route('/T2TOS/exception')
 def a293():
     if ip() not in sidname:
