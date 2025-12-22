@@ -479,7 +479,13 @@ def a292():
 @app.route('/')
 def a294():
     return redirect("/T2TOS")
-
+@app.route('/T2TOS/logout')
+def a211():
+    try:
+        del sidname[ip()]
+    except:
+        pass
+    return redirect("/T2TOS")
 @app.route('/T2TOS/exception')
 def a293():
     if ip() not in sidname:
