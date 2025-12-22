@@ -469,9 +469,9 @@ def a291():
 def a292():
     name = request.form.get("user", "")
     p = request.form.get("pass", "")
-    if ((name in userspasswords and hash_pw(p) == userspasswords[name]) or name not in userspasswords) and name not in {"admin","owner"} and name.strip():
+    if ((name in userspasswords and hash_pw(p) == userspasswords[name]) or name not in userspasswords) and name.strip():
         userspasswords.setdefault(name,hash_pw(p))
-        sidname.setdefault(hash_pw(ip()),name)
+        sidname.setdefault(ip(),name)
         sandboxes.setdefault(name,SandBox())
         return redirect("/T2TOS")
     else:
