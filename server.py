@@ -2,8 +2,8 @@ from flask import Flask,render_template,request,redirect
 import random
 from flask import session
 import secrets
-app.secret_key = secrets.token_hex(32)
 app=Flask(__name__)
+app.secret_key = secrets.token_hex(32)
 global_lib={}
 mem=""
 sandboxes={}
