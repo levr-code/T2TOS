@@ -463,10 +463,10 @@ class SandBox:
 #                          T2TOS                           #
 ############################################################
 @app.route('/T2TOS/login')
-def a21():
+def a291():
     return render_template("auth.html",)
 @app.route('/T2TOS/login/done')
-def a21():
+def a292():
     name = request.form.get("user", "")
     p = request.form.get("pass", "")
     if (name in userspasswords and p == userspasswords[name]) or name not in userspasswords:
@@ -477,7 +477,7 @@ def a21():
     else:
         return redirect("/T2TOS/login")
 @app.route('/T2TOS/exception')
-def a21():
+def a293():
     if ip() not in sidname:
         return redirect("/T2TOS/login")
     return render_template("button.html",text="Your T2TOS run into a problem :(",button_name="back",button_href="/T2TOS")
