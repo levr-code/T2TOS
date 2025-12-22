@@ -1,5 +1,8 @@
 from flask import Flask,render_template,request,redirect
 import random
+from flask import session
+import secrets
+app.secret_key = secrets.token_hex(32)
 app=Flask(__name__)
 global_lib={}
 mem=""
@@ -10,13 +13,10 @@ T2TOS_COMMANDS = [
     "/pow","/hello","/item","/ask","/pi","/space","/joke","/file.copy","/theme.black","/theme.hacker","in","/theme.cyberpunk","/theme.forest","/theme.sunset","/theme.ocean","/theme.retro","/theme.pastel","/theme.galaxy","/theme.matrix","/theme.sunrise","/theme.twilight","/theme.cyberforest","/lib.get","/lib.save",
     "/try","/for","/thread","/range","/file.all","/desktop","/theme.","/mode.v2","/mode.v1","/theme.light","/theme.red-light","/theme.blue","/theme.light-red","/theme.red","/theme.dark","/theme.vscode","/theme.vscode-hc","/theme.pycharm","/q","/theme.BLACK"
 ]
-def ip():  
-    forwarded_for = request.headers.get("X-Forwarded-For")
-    if forwarded_for:
-        user_ip = forwarded_for.split(",")[0].strip()
-    else:
-        user_ip = request.remote_addr
-    return user_ip
+def ip():
+    if "sid" not in session:
+        session["sid"] = secrets.token_hex(16)
+    return session["sid"]
 @app.template_filter('highlight_t2tos')
 def highlight_t2tos(text):
     import re
