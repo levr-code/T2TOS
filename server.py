@@ -477,7 +477,7 @@ def a292():
     else:
         return redirect("/T2TOS/login")
 @app.route('/')
-def a293():
+def a294():
     return redirect("/T2TOS")
 
 @app.route('/T2TOS/exception')
