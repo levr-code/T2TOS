@@ -1,22 +1,25 @@
 from flask import Flask,render_template,request,redirect
-import random
+import random,hashlib,secrets
 from flask import session
-import secrets
 app=Flask(__name__)
 app.secret_key = secrets.token_hex(32)
 global_lib={}
 mem=""
 sandboxes={}
+sidname={}
 T2TOS_COMMANDS = [
     "/help","/chat.clean","/chat.clear","/userbuf.clear","/plus","/min","/mul","/div","/mod","/chat.len",
     "/file.save","/file.open","/file.delete","/file.deleteall","/exit","/echo","/lib.all",
     "/pow","/hello","/item","/ask","/pi","/space","/joke","/file.copy","/theme.black","/theme.hacker","in","/theme.cyberpunk","/theme.forest","/theme.sunset","/theme.ocean","/theme.retro","/theme.pastel","/theme.galaxy","/theme.matrix","/theme.sunrise","/theme.twilight","/theme.cyberforest","/lib.get","/lib.save",
     "/try","/for","/thread","/range","/file.all","/desktop","/theme.","/mode.v2","/mode.v1","/theme.light","/theme.red-light","/theme.blue","/theme.light-red","/theme.red","/theme.dark","/theme.vscode","/theme.vscode-hc","/theme.pycharm","/q","/theme.BLACK"
 ]
+userspasswords={}
 def ip():
     if "sid" not in session:
         session["sid"] = secrets.token_hex(16)
     return session["sid"]
+def hash_pw(p):
+    return hashlib.sha256(p.encode()).hexdigest()
 @app.template_filter('highlight_t2tos')
 def highlight_t2tos(text):
     import re
@@ -459,23 +462,35 @@ class SandBox:
 ############################################################
 #                          T2TOS                           #
 ############################################################
+@app.route('/T2TOS/login')
+def a21():
+    return render_template("auth.html",)
+@app.route('/T2TOS/login/done')
+def a21():
+    name = request.form.get("user", "")
+    p = request.form.get("pass", "")
+    if (name in userspasswords and p == userspasswords[name]) or name not in userspasswords:
+        userspasswords.setdefault(name,p)
+        sidname.setdefault(ip(),name)
+        sandboxes.setdefault(name,SandBox())
+        return redirect("/T2TOS")
+    else:
+        return redirect("/T2TOS/login")
 @app.route('/T2TOS/exception')
 def a21():
-    if ip() not in sandboxes:
-        sandboxes.setdefault(ip(),SandBox())
+    if ip() not in sidname:
+        return redirect("/T2TOS/login")
     return render_template("button.html",text="Your T2TOS run into a problem :(",button_name="back",button_href="/T2TOS")
 @app.route('/T2TOS')
 def a20():
-    if ip() not in sandboxes:
-        sandboxes.setdefault(ip(),SandBox())
-    return render_template("list.html",theme=sandboxes[ip()].theme,chat=sandboxes[ip()].chat,title="T2TOS",text="T2TOS")
+    if ip() not in sidname:
+        return redirect("/T2TOS/login")
+    return render_template("list.html",theme=sandboxes[sidname[ip()]].theme,chat=sandboxes[sidname[ip()]].chat,title=f"{sidname[ip()]}'s T2TOS",text=f"{sidname[ip()]}'s T2TOS")
 @app.route("/redir", methods=["POST","GET"])
 def check_page():
     try:
         p = request.form.get("command", "")
-        if ip() not in sandboxes:
-            sandboxes.setdefault(ip(),SandBox())
-        sandboxes[ip()].safeCommand(p)
+        sandboxes[sidname[ip()]].safeCommand(p)
     except:
         return redirect("/T2TOS/exception")
     return redirect("/T2TOS")
