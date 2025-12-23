@@ -85,6 +85,7 @@ class SandBox:
                 self.__history = self.__history[-200:]
             if len(com)>0 and "import" not in str(com):
                 def checkcommand(a:str,/,userss=False):
+                    global mem,global_lib
                     print(f"{ip()} - checkcommand - {a}")
                     QUOTES = [
                         "The best way to predict the future is to invent it. – Alan Kay",
