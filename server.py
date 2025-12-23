@@ -125,14 +125,15 @@ class SandBox:
                         for i in REfindall(a, r"<random -?\d+ -?\d+>"):
                             t=random.randint(int(i.split()[1]),int(i.split()[2][:-1]))
                             a=REplace1(a,i,t)
-                    if "/file.save[com/" not in a and "/file.save[sys/" not in a and "/lib.save" not in a:
                         for i in REfindall(a, r"<chat -?\d+>"):
                             t=self.__chat[int(i.split()[1][:-1])]
                             a=REplace1(a,i,t)
-                    if "/file.save[com/" not in a and "/file.save[sys/" not in a and "/lib.save" not in a:
                         for i in REfindall(a, r"<history -?\d+>"):
                             t=self.__history[int(i.split()[1][:-1])]
                             a=REplace1(a,i,t)
+                    for i in REfindall(a, r"<range \d+>"):
+                        t=",".join(range(int(i.split()[1][:-1])))
+                        a=REplace1(a,i,t)
                     def types(file:str):
                         if file not in self.__files:
                             return "[###/]:"+file
@@ -183,9 +184,9 @@ class SandBox:
                             a=a.replace(i,v12v2[i])
                     for i in self.__files:
                         if types(i)[2]!=" ":
-                            a=str(a).replace(f"<{i}>",str(self.__files[i][4:]))
+                            a=str(a).replace(f"<{i}>",str(self.__files[i][4:]).replace(";",","))
                         else:
-                            a=str(a).replace(f"<{i}>",str(self.__files[i]))
+                            a=str(a).replace(f"<{i}>",str(self.__files[i]).replace(";",","))
                     def addtochat(text:str):
                         print(f"{ip()} - addtochat - {text}")
                         self.__chat.pop(0)
@@ -441,7 +442,7 @@ class SandBox:
                                     checkcommand(":".join(i1[6:].split(":")[3:]))
                         elif a[:4]=="/for" and a[5:].split(" ")[1]=="in":
                             s=a[5:].split(" ")
-                            for i in range(int(s[2])):
+                            for i in s[2].split(","):
                                 s1=str(" ".join(s[3:])).replace(f"<{s[0]}>",str(i))
                                 if not( s1[:3]=="for" and s1[4:].split(" ")[1]=="in"):
                                     addtochat(s1)
