@@ -121,15 +121,15 @@ class SandBox:
                         patternn = re.compile(pattern, re.DOTALL)
                         source = re.findall(patternn, source)
                         return source
-                    if "/file.save[com/" not in a and "/file.save[sys/" not in a:
+                    if "/file.save[com/" not in a and "/file.save[sys/" not in a and "/lib.save" not in a:
                         for i in REfindall(a, r"<random -?\d+ -?\d+>"):
                             t=random.randint(int(i.split()[1]),int(i.split()[2][:-1]))
                             a=REplace1(a,i,t)
-                    if "/file.save[com/" not in a and "/file.save[sys/" not in a:
+                    if "/file.save[com/" not in a and "/file.save[sys/" not in a and "/lib.save" not in a:
                         for i in REfindall(a, r"<chat -?\d+>"):
                             t=self.__chat[int(i.split()[1][:-1])]
                             a=REplace1(a,i,t)
-                    if "/file.save[com/" not in a and "/file.save[sys/" not in a:
+                    if "/file.save[com/" not in a and "/file.save[sys/" not in a and "/lib.save" not in a:
                         for i in REfindall(a, r"<history -?\d+>"):
                             t=self.__history[int(i.split()[1][:-1])]
                             a=REplace1(a,i,t)
