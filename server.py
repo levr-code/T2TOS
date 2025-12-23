@@ -454,6 +454,12 @@ class SandBox:
                                 checkcommand(f"/file.open {a[1:].split(" ")[0]}")
                             else:
                                 checkcommand(f"/file.open {a[1:].split(" ")[0]}")
+                        elif a[0]=="/":
+                            if types(a[1:].split(" ")[0])[2]=="y" or types(a[1:].split(" ")[0])[2]=="n":
+                                addtochat(" ".join(a[1:].split(" ")[1:]))
+                                checkcommand(f"/file.open {a[1:].split(" ")[0]}")
+                            elif types(a[1:].split(" ")[0])[2]=="o":
+                                checkcommand(f"/file.open {a[1:].split(" ")[0]}")
                         if a[0]=="$"and "=" in a:
                             addtochat(a.split("=")[1])
                             checkcommand(a.split("=")[1])
