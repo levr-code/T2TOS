@@ -132,7 +132,9 @@ class SandBox:
                             t=self.__history[int(i.split()[1][:-1])]
                             a=REplace1(a,i,t)
                     for i in REfindall(a, r"<range \d+>"):
+                        print(i)
                         t=",".join(range(int(i.split()[1][:-1])))
+                        print(t)
                         a=REplace1(a,i,t)
                     def types(file:str):
                         if file not in self.__files:
