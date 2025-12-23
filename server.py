@@ -411,10 +411,12 @@ class SandBox:
                             addtochat(s[0].split(s[1])[int(s[2])])
                         elif a[:4]=="/try":
                             try:
-                                checkcommand(a[5:])
+                                checkcommand(a[5:].split(":fails:")[0])
                             except Exception as e:
-                                print(repr(e))
                                 addtochat(repr(e))
+                                say(repr(e))
+                                print(repr(e))
+                                checkcommand(a[5:].split(":fails:")[1])
                         elif a[:4]=="/if " and self.__mode=="v2":
                             sp=a[5:]
                             i1="N"*6+sp
