@@ -25,7 +25,7 @@ def highlight_t2tos(text):
     import re
     from markupsafe import Markup
 
-    tokens = re.split(r'(\s+|[\[\]\(\)\{\}\$%;,@#|<>&]|\=| |com/|sys/|txt/|var/|lst/|lib/|fnc/)', text)
+    tokens = re.split(r'(\s+|[\[\]\(\)\{\}\$%;,@#|<>&]|\=| |com/|sys/|txt/|var/|lst/|lib/|fnc/|:fails:)', text)
     result = []
     i=0
     for t in tokens:
@@ -35,7 +35,7 @@ def highlight_t2tos(text):
             isvar=False
         if not t or t.isspace():
             result.append(t)
-        elif t.strip() in T2TOS_COMMANDS:
+        elif t.strip() in T2TOS_COMMANDS+[":fails:"]:
             result.append(f'<span class="t2tos-command">{t}</span>')
         elif isvar:
             result.append(f'<span class="t2tos-var">{t}</span>')
