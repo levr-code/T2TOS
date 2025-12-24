@@ -134,7 +134,7 @@ class SandBox:
                     for i in REfindall(a, r"<range \d+>"):
                         try:
                             print(i)
-                            t=",".join(range(int(i.split()[1][:-1])))
+                            t=",".join([str(i) for i in  range(int(i.split()[1][:-1]))])
                             print(t)
                             a=REplace1(a,i,t)
                         except Exception as e:
