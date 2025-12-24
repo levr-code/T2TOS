@@ -10,7 +10,7 @@ sandboxes={}
 sidname={}
 T2TOS_COMMANDS = [
     "/help","/chat.clean","/chat.clear","/userbuf.clear","/plus","/min","/mul","/div","/mod","/chat.len",
-    "/file.save","/file.open","/file.delete","/file.deleteall","/exit","/echo","/lib.all",
+    "/file.save","/file.open","/file.delete","/file.deleteall","/exit","/echo","/lib.all","/dict.get","/file.text",
     "/pow","/hello","/item","/ask","/pi","/space","/joke","/file.copy","/theme.black","/theme.hacker","in","/theme.cyberpunk","/theme.forest","/theme.sunset","/theme.ocean","/theme.retro","/theme.pastel","/theme.galaxy","/theme.matrix","/theme.sunrise","/theme.twilight","/theme.cyberforest","/lib.get","/lib.save",
     "/try","/for","/thread","/range","/file.all","/desktop","/theme.","/mode.v2","/mode.v1","/theme.light","/theme.red-light","/theme.blue","/theme.light-red","/theme.red","/theme.dark","/theme.vscode","/theme.vscode-hc","/theme.pycharm","/q","/theme.BLACK"
 ]
@@ -159,6 +159,8 @@ class SandBox:
                                     return "[lib/]:"+file
                                 case "fnc/":
                                     return "[fnc/]:"+file
+                                case "dic/":
+                                    return "[dic/]:"+file
                                 case _:
                                     return "[    ]:"+file
                     def typeWithoutfile(file:str):
@@ -180,6 +182,8 @@ class SandBox:
                                     return "lib/"
                                 case "fnc/":
                                     return "fnc/"
+                                case "dic/":
+                                    return "dic/"
                                 case _:
                                     return ""
                     v12v2={"try":"/try","for":"/for","thread":"/thread"}
@@ -232,6 +236,12 @@ class SandBox:
                         elif a[:5]=="/echo":
                             say(a[6:])
                             addtochat(a[6:])
+                        elif a[:9]=="/dict.get":
+                            args=a[10:].split()
+                            for i in self.__files[args[0].split(";"):
+                                if i.split("%")[0]==args[1]:
+                                    addtochat(i.split("%")[1])
+                                    break
                         elif a[:2] == "/q":
                             checkcommand(a[3:],userss=True)
                         elif a[:8] == "/lib.get":
@@ -286,6 +296,12 @@ class SandBox:
                                         else:
                                             addtochat(i)
                                             checkcommand(i)
+                                elif self.__files[a[11:]][:4]=="dic/":
+                                    for i in self.__files[a[11:]].split(";"):
+                                        if i[:4]=="dic/":
+                                            addtochat(i[4:])
+                                        else:
+                                            addtochat(i)
                                 elif self.__files[a[11:]][:4]=="fnc/":
                                     file:str=self.__files[a[11:]]
                                     for i in range(len(self.__chat[-1].split(" "))):
