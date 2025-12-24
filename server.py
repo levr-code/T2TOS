@@ -446,10 +446,11 @@ class SandBox:
                                 if int(i1[6:].split(":")[0])<=int(i1[6:].split(":")[2][:-1]):
                                     checkcommand(":".join(i1[6:].split(":")[3:]))
                         elif a[:4]=="/for" and a[5:].split(" ")[1]=="in":
-                            s=a[5:].split(" ")
-                            for i in s[2].split(","):
-                                s1=str(" ".join(s[3:])).replace(f"<{s[0]}>",str(i))
-                                if not( s1[:3]=="for" and s1[4:].split(" ")[1]=="in"):
+                            s=a[5:].split(":")[0].split(" ")
+                            executing=":".join(a[5:].split(":")[1:])
+                            for i in s[2:].split(","):
+                                s1=str(" ".join(executing)).replace(f"<{s[0]}>",str(i))
+                                if not( s1[:4]=="/for" and s1[4:].split(" ")[1]=="in"):
                                     addtochat(s1)
                                 checkcommand(s1)
                         elif a[:6]=="/range":
