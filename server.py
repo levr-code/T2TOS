@@ -238,7 +238,7 @@ class SandBox:
                             addtochat(a[6:])
                         elif a[:9]=="/dict.get":
                             args=a[10:].split()
-                            for i in self.__files[args[0].split(";"):
+                            for i in self.__files[args[0].split(";")]:
                                 if i.split("%")[0]==args[1]:
                                     addtochat(i.split("%")[1])
                                     break
