@@ -4,6 +4,7 @@ from flask import session
 app=Flask(__name__)
 app.secret_key = secrets.token_hex(32)
 global_lib={}
+global_var={}
 mem=""
 sandboxes={}
 sidname={}
@@ -424,6 +425,17 @@ class SandBox:
                                 say(repr(e))
                                 print(repr(e))
                                 checkcommand(a[5:].split(":fails:")[1])
+                        elif a[:11]=="/global.set":
+                            global global_var
+                            args=a[12:].split()
+                            if args[0] in global_var:
+                                global_var[args[0]]=args[1]
+                            else:
+                                global_var.setdefault(args[0],args[1])
+                        elif a[:11]=="/global.get":
+                            global global_var
+                            args=a[12:].split()
+                            addtochat(global_var[args[0]])
                         elif a[:4]=="/if " and self.__mode=="v2":
                             sp=a[5:]
                             i1="N"*6+sp
