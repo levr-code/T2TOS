@@ -448,8 +448,8 @@ class SandBox:
                         elif a[:4]=="/for" and a[5:].split(" ")[1]=="in":
                             s:list=a[5:].split(":")[0].split(" ")
                             executing:str=":".join(a[5:].split(":")[1:])
-                            for i in s[2:].split(","):
-                                s1=str(" ".join(executing)).replace(f"<{s[0]}>",str(i))
+                            for i in " ".join(s[2:]).split(","):
+                                s1=str("".join(executing)).replace(f"<{s[0]}>",str(i))
                                 if not( s1[:4]=="/for" and s1[4:].split(" ")[1]=="in"):
                                     addtochat(s1)
                                 checkcommand(s1)
