@@ -86,7 +86,7 @@ class SandBox:
                 self.__history = self.__history[-200:]
             if len(com)>0 and "import" not in str(com):
                 def checkcommand(a:str,/,userss=False):
-                    global mem,global_lib
+                    global mem,global_lib,global_var
                     print(f"{ip()} - checkcommand - {a}")
                     QUOTES = [
                         "The best way to predict the future is to invent it. – Alan Kay",
@@ -426,14 +426,12 @@ class SandBox:
                                 print(repr(e))
                                 checkcommand(a[5:].split(":fails:")[1])
                         elif a[:11]=="/global.set":
-                            global global_var
                             args=a[12:].split()
                             if args[0] in global_var:
                                 global_var[args[0]]=args[1]
                             else:
                                 global_var.setdefault(args[0],args[1])
                         elif a[:11]=="/global.get":
-                            global global_var
                             args=a[12:].split()
                             addtochat(global_var[args[0]])
                         elif a[:4]=="/if " and self.__mode=="v2":
