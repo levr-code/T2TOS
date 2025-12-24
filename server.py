@@ -132,10 +132,13 @@ class SandBox:
                             t=self.__history[int(i.split()[1][:-1])]
                             a=REplace1(a,i,t)
                     for i in REfindall(a, r"<range \d+>"):
-                        print(i)
-                        t=",".join(range(int(i.split()[1][:-1])))
-                        print(t)
-                        a=REplace1(a,i,t)
+                        try:
+                            print(i)
+                            t=",".join(range(int(i.split()[1][:-1])))
+                            print(t)
+                            a=REplace1(a,i,t)
+                        except Exception as e:
+                            print(e)
                     def types(file:str):
                         if file not in self.__files:
                             return "[###/]:"+file
