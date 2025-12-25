@@ -132,18 +132,27 @@ class SandBox:
                         for i in REfindall(a, r"<history -?\d+>"):
                             t=self.__history[int(i.split()[1][:-1])]
                             a=REplace1(a,i,t)
-                        for i in REfindall(a, r"<dict .+ .+>"):
-                            if file[4:]!="dic/":
+                        for i in REfindall(a, r"<.+\..+>"):
+                            obj, key = i[1:-1].split(".")
+                            
+                            if obj not in self.__files:
                                 checkcommand("/exit")
-                            file = self.__files[i.split()[1]][4:]
-                            key = i.split()[2][:-1]
-                        
+                            
+                            file = self.__files[obj]
+                            
+                            if file[:4] != "dic/":
+                                checkcommand("/exit")
+                            
+                            file = file[4:].replace("<self>", obj)
+                            
+                            t = ""  # default if key not found
                             for j in file.split(";"):
                                 if j.split("%")[0] == key:
                                     t = j.split("%")[1]
                                     break
-                        
+                            
                             a = REplace1(a, i, t)
+
                     for i in REfindall(a, r"<range \d+>"):
                         try:
                             print(i)
