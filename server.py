@@ -133,26 +133,46 @@ class SandBox:
                             t=self.__history[int(i.split()[1][:-1])]
                             a=REplace1(a,i,t)
                         for i in REfindall(a, r"<.+\..+>"):
-                            obj, key = i[1:-1].split(".")
+                                try:
+                                    parts = i[1:-1].split(".")
+                                    if len(parts) != 2:
+                                        continue  # skip malformed
                             
-                            if obj not in self.__files:
-                                checkcommand("/exit")
+                                    obj, key = parts
                             
-                            file = self.__files[obj]
+                                    # check object exists
+                                    if obj not in self.__files:
+                                        continue
                             
-                            if file[:4] != "dic/":
-                                checkcommand("/exit")
+                                    file = self.__files[obj]
                             
-                            file = file[4:].replace("<self>", obj)
+                                    # check file is dic/
+                                    if not file.startswith("dic/"):
+                                        continue
                             
-                            t = ""  # default if key not found
-                            for j in file.split(";"):
-                                if j.split("%")[0] == key:
-                                    t = j.split("%")[1]
-                                    break
+                                    # remove dic/ prefix
+                                    file = file[4:].replace("<self>", obj)
                             
-                            a = REplace1(a, i, t)
-
+                                    # find key
+                                    t = None
+                                    for j in file.split(";"):
+                                        if j.split("%")[0] == key:
+                                            t = j.split("%")[1]
+                                            break
+                            
+                                    if t is None:
+                                        t = ""  # key missing → return empty string
+                            
+                                    # method or field
+                                    if t.startswith("#"):  # method
+                                        checkcommand(t[1:])
+                                        a = REplace1(a, i, self.__chat[-1])
+                                    else:
+                                        a = REplace1(a, i, t)
+                            
+                                except Exception as e:
+                                    # skip this replacement if anything fails
+                                    say(f"Error processing {i}: {e}")
                     for i in REfindall(a, r"<range \d+>"):
                         try:
                             print(i)
