@@ -25,7 +25,6 @@ def hash_pw(p):
 def highlight_t2tos(text):
     import re
     from markupsafe import Markup
-
     tokens = re.split(r'(\s+|[\[\]\(\)\{\}\$%;,@#|<>&]|\=| |com/|sys/|txt/|var/|lst/|lib/|fnc/|:fails:)', text)
     result = []
     i=0
@@ -132,58 +131,59 @@ class SandBox:
                             a=REplace1(a,i,t)
                         for i in REfindall(a, r"<history -?\d+>"):
                             t=self.__history[int(i.split()[1][:-1])]
-                            a=REplace1(a,i,t)for i in REfindall(a, r"<.+\..+>"):
-                        # get object and key
-                        obj, key = i[1:-1].split(".", 1)
-                        file = self.__files.get(obj, "dic/")[4:]
-                    
-                        if not file.startswith("dic/"):
-                            raise RuntimeError(f"{obj} is not a dic/ object")
-                    
-                        # find value or default to the placeholder
-                        t = i
-                        for j in file.split(";"):
-                            if j.split("%")[0] == key:
-                                t = j.split("%")[1]
-                                break
-                    
-                        # check if it's a method or normal field
-                        if t.startswith("#"):
-                            checkcommand(t[1:])
-                            a = REplace1(a, i, self.__chat[-1])
-                        else:
-                            a = REplace1(a, i, t)
-                    
-                    # AFTER object expansion, handle assignments
-                    if a.startswith("@") and "=" in a:
-                        try:
-                            obj_key, value = a[1:].split("=", 1)
-                            obj, key = obj_key.split(".", 1)
-                    
-                            if obj not in self.__files:
-                                self.__files[obj] = "dic/"
-                    
-                            if not self.__files[obj].startswith("dic/"):
+                            a=REplace1(a,i,t)
+                        for i in REfindall(a, r"<.+\..+>"):
+                            # get object and key
+                            obj, key = i[1:-1].split(".", 1)
+                            file = self.__files.get(obj, "dic/")[4:]
+                        
+                            if not file.startswith("dic/"):
                                 raise RuntimeError(f"{obj} is not a dic/ object")
-                    
-                            file_content = self.__files[obj][4:]
-                            fields = file_content.split(";") if file_content else []
-                    
-                            updated = False
-                            for idx, field in enumerate(fields):
-                                if field.split("%")[0] == key:
-                                    fields[idx] = f"{key}%{value}"
-                                    updated = True
+                        
+                            # find value or default to the placeholder
+                            t = i
+                            for j in file.split(";"):
+                                if j.split("%")[0] == key:
+                                    t = j.split("%")[1]
                                     break
-                            if not updated:
-                                fields.append(f"{key}%{value}")
-                    
-                            self.__files[obj] = "dic/" + ";".join(fields)
-                            if self.__chat:
-                                addtochat(self.__chat[-1])
-                    
-                        except Exception as e:
-                            raise RuntimeError(f"Assignment error: {e}")
+                        
+                            # check if it's a method or normal field
+                            if t.startswith("#"):
+                                checkcommand(t[1:])
+                                a = REplace1(a, i, self.__chat[-1])
+                            else:
+                                a = REplace1(a, i, t)
+                        
+                        # AFTER object expansion, handle assignments
+                        if a.startswith("@") and "=" in a:
+                            try:
+                                obj_key, value = a[1:].split("=", 1)
+                                obj, key = obj_key.split(".", 1)
+                        
+                                if obj not in self.__files:
+                                    self.__files[obj] = "dic/"
+                        
+                                if not self.__files[obj].startswith("dic/"):
+                                    raise RuntimeError(f"{obj} is not a dic/ object")
+                        
+                                file_content = self.__files[obj][4:]
+                                fields = file_content.split(";") if file_content else []
+                        
+                                updated = False
+                                for idx, field in enumerate(fields):
+                                    if field.split("%")[0] == key:
+                                        fields[idx] = f"{key}%{value}"
+                                        updated = True
+                                        break
+                                if not updated:
+                                    fields.append(f"{key}%{value}")
+                        
+                                self.__files[obj] = "dic/" + ";".join(fields)
+                                if self.__chat:
+                                    addtochat(self.__chat[-1])
+                        
+                            except Exception as e:
+                                raise RuntimeError(f"Assignment error: {e}")
 
                     for i in REfindall(a, r"<range \d+>"):
                         try:
