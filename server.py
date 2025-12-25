@@ -132,80 +132,59 @@ class SandBox:
                             a=REplace1(a,i,t)
                         for i in REfindall(a, r"<history -?\d+>"):
                             t=self.__history[int(i.split()[1][:-1])]
-                            a=REplace1(a,i,t)
-                        if a.startswith("@") and "=" in a:
-                            try:
-                                obj_key, value = a[1:].split("=", 1)
-                                obj, key = obj_key.split(".", 1)
-                        
-                                if obj not in self.__files:
-                                    self.__files[obj] = "dic/"
-                        
-                                if not self.__files[obj].startswith("dic/"):
-                                    raise ValueError(f"{obj} is not a dic/ object")
-                        
-                                file_content = self.__files[obj][4:]
-                                fields = file_content.split(";") if file_content else []
-                        
-                                updated = False
-                                for i, field in enumerate(fields):
-                                    if field.split("%")[0] == key:
-                                        fields[i] = f"{key}%{value}"
-                                        updated = True
-                                        break
-                                if not updated:
-                                    fields.append(f"{key}%{value}")
-                        
-                                self.__files[obj] = "dic/" + ";".join(fields)
-                        
-                                # safely echo last chat message if exists
-                                if self.__chat:
-                                    addtochat(self.__chat[-1])
-                        
-                            except Exception as e:
-                                # let /try :fails: catch it
-                                raise RuntimeError(f"Assignment error: {e}")
-                        for i in REfindall(a, r"<.+\..+>"):
-                                try:
-                                    parts = i[1:-1].split(".")
-                                    if len(parts) != 2:
-                                        continue  # skip malformed
-                            
-                                    obj, key = parts
-                            
-                                    # check object exists
-                                    if obj not in self.__files:
-                                        continue
-                            
-                                    file = self.__files[obj]
-                            
-                                    # check file is dic/
-                                    if not file.startswith("dic/"):
-                                        continue
-                            
-                                    # remove dic/ prefix
-                                    file = file[4:].replace("<self>", obj)
-                            
-                                    # find key
-                                    t = None
-                                    for j in file.split(";"):
-                                        if j.split("%")[0] == key:
-                                            t = j.split("%")[1]
-                                            break
-                            
-                                    if t is None:
-                                        t = ""  # key missing → return empty string
-                            
-                                    # method or field
-                                    if t.startswith("#"):  # method
-                                        checkcommand(t[1:])
-                                        a = REplace1(a, i, self.__chat[-1])
-                                    else:
-                                        a = REplace1(a, i, t)
-                            
-                                except Exception as e:
-                                    # skip this replacement if anything fails
-                                    say(f"Error processing {i}: {e}")
+                            a=REplace1(a,i,t)for i in REfindall(a, r"<.+\..+>"):
+                        # get object and key
+                        obj, key = i[1:-1].split(".", 1)
+                        file = self.__files.get(obj, "dic/")[4:]
+                    
+                        if not file.startswith("dic/"):
+                            raise RuntimeError(f"{obj} is not a dic/ object")
+                    
+                        # find value or default to the placeholder
+                        t = i
+                        for j in file.split(";"):
+                            if j.split("%")[0] == key:
+                                t = j.split("%")[1]
+                                break
+                    
+                        # check if it's a method or normal field
+                        if t.startswith("#"):
+                            checkcommand(t[1:])
+                            a = REplace1(a, i, self.__chat[-1])
+                        else:
+                            a = REplace1(a, i, t)
+                    
+                    # AFTER object expansion, handle assignments
+                    if a.startswith("@") and "=" in a:
+                        try:
+                            obj_key, value = a[1:].split("=", 1)
+                            obj, key = obj_key.split(".", 1)
+                    
+                            if obj not in self.__files:
+                                self.__files[obj] = "dic/"
+                    
+                            if not self.__files[obj].startswith("dic/"):
+                                raise RuntimeError(f"{obj} is not a dic/ object")
+                    
+                            file_content = self.__files[obj][4:]
+                            fields = file_content.split(";") if file_content else []
+                    
+                            updated = False
+                            for idx, field in enumerate(fields):
+                                if field.split("%")[0] == key:
+                                    fields[idx] = f"{key}%{value}"
+                                    updated = True
+                                    break
+                            if not updated:
+                                fields.append(f"{key}%{value}")
+                    
+                            self.__files[obj] = "dic/" + ";".join(fields)
+                            if self.__chat:
+                                addtochat(self.__chat[-1])
+                    
+                        except Exception as e:
+                            raise RuntimeError(f"Assignment error: {e}")
+
                     for i in REfindall(a, r"<range \d+>"):
                         try:
                             print(i)
