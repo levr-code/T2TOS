@@ -133,6 +133,38 @@ class SandBox:
                         for i in REfindall(a, r"<history -?\d+>"):
                             t=self.__history[int(i.split()[1][:-1])]
                             a=REplace1(a,i,t)
+                        if a.startswith("@") and "=" in a:
+                            try:
+                                obj_key, value = a[1:].split("=", 1)
+                                obj, key = obj_key.split(".", 1)
+                        
+                                if obj not in self.__files:
+                                    self.__files[obj] = "dic/"
+                        
+                                if not self.__files[obj].startswith("dic/"):
+                                    raise ValueError(f"{obj} is not a dic/ object")
+                        
+                                file_content = self.__files[obj][4:]
+                                fields = file_content.split(";") if file_content else []
+                        
+                                updated = False
+                                for i, field in enumerate(fields):
+                                    if field.split("%")[0] == key:
+                                        fields[i] = f"{key}%{value}"
+                                        updated = True
+                                        break
+                                if not updated:
+                                    fields.append(f"{key}%{value}")
+                        
+                                self.__files[obj] = "dic/" + ";".join(fields)
+                        
+                                # safely echo last chat message if exists
+                                if self.__chat:
+                                    addtochat(self.__chat[-1])
+                        
+                            except Exception as e:
+                                # let /try :fails: catch it
+                                raise RuntimeError(f"Assignment error: {e}")
                         for i in REfindall(a, r"<.+\..+>"):
                                 try:
                                     parts = i[1:-1].split(".")
