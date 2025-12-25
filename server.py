@@ -25,7 +25,7 @@ def hash_pw(p):
 def highlight_t2tos(text):
     import re
     from markupsafe import Markup
-    tokens = re.split(r'(\s+|[\[\]\(\)\{\}\$%;,@#|<>&]|\=| |com/|sys/|txt/|var/|lst/|lib/|fnc/|:fails:)', text)
+    tokens = re.split(r'(\s+|[\[\]\(\)\{\}\$%;,@#|<>&]|\=| |com/|sys/|txt/|var/|lst/|lib/|map/|fnc/|:fails:)', text)
     result = []
     i=0
     for t in tokens:
