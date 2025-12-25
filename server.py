@@ -155,35 +155,16 @@ class SandBox:
                                 a = REplace1(a, i, t)
                         
                         # AFTER object expansion, handle assignments
-                        if a.startswith("@") and "=" in a:
+                        if a.startswith("@") and "=" in a and "." in a:
                             try:
-                                obj_key, value = a[1:].split("=", 1)
-                                obj, key = obj_key.split(".", 1)
-                        
-                                if obj not in self.__files:
-                                    self.__files[obj] = "dic/"
-                        
-                                if not self.__files[obj].startswith("dic/"):
-                                    raise RuntimeError(f"{obj} is not a dic/ object")
-                        
-                                file_content = self.__files[obj][4:]
-                                fields = file_content.split(";") if file_content else []
-                        
-                                updated = False
-                                for idx, field in enumerate(fields):
-                                    if field.split("%")[0] == key:
-                                        fields[idx] = f"{key}%{value}"
-                                        updated = True
-                                        break
-                                if not updated:
-                                    fields.append(f"{key}%{value}")
-                        
-                                self.__files[obj] = "dic/" + ";".join(fields)
-                                if self.__chat:
-                                    addtochat(self.__chat[-1])
-                        
+                                left, value = a[1:].split("=", 1)
+                                obj, key = left.split(".", 1)
+                                dic_set(obj, key, value)
+                                addtochat(value)
+                                return
                             except Exception as e:
-                                raise RuntimeError(f"Assignment error: {e}")
+                                raise RuntimeError(f"dic assignment error: {e}")
+
 
                     for i in REfindall(a, r"<range \d+>"):
                         try:
