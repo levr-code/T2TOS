@@ -435,6 +435,9 @@ class SandBox:
                         elif a[:11]=="/file.copy(":
                             s=a[11:].split(")")
                             self.__files.setdefault(s[1],self.__files[s[0]])
+                        elif a[:8]=="/replace":
+                            args=a[9:].split(" ",2)
+                            addochat(args[2].replace(args[0],args[1]))
                         elif a[:11]=="/file.copy[":
                             s=a[11:].split("]")
                             self.__files.setdefault(s[1],self.__files[s[0]])
