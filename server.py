@@ -137,9 +137,6 @@ class SandBox:
                             obj, key = i[1:-1].split(".", 1)
                             file = self.__files.get(obj, "dic/")[4:]
                         
-                            if not file.startswith("dic/"):
-                                raise RuntimeError(f"{obj} is not a dic/ object")
-                        
                             # find value or default to the placeholder
                             t = i
                             for j in file.split(";"):
