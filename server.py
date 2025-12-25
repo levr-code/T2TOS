@@ -132,6 +132,15 @@ class SandBox:
                         for i in REfindall(a, r"<history -?\d+>"):
                             t=self.__history[int(i.split()[1][:-1])]
                             a=REplace1(a,i,t)
+                        for i in REfindall(a, r"<dict .+ .+>"):
+                            file=self.__files[i.split()[0]][4:]
+                            key=i.split()[1][:-1]
+                            for j in file.split(";"):
+                                if j.split("%")[0]==key:
+                                    print("iteration")
+                                    t=j.split("%")[1]
+                                    break
+                            a=REplace1(a,i,t)
                     for i in REfindall(a, r"<range \d+>"):
                         try:
                             print(i)
@@ -236,12 +245,6 @@ class SandBox:
                         elif a[:5]=="/echo":
                             say(a[6:])
                             addtochat(a[6:])
-                        elif a[:9]=="/dict.get":
-                            args=a[10:].split()
-                            for i in self.__files[args[0].split(";")][4:].split(";"):
-                                if i.split("%")[0]==args[1]:
-                                    addtochat(i.split("%")[1])
-                                    break
                         elif a[:2] == "/q":
                             checkcommand(a[3:],userss=True)
                         elif a[:8] == "/lib.get":
