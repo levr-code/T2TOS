@@ -135,7 +135,7 @@ class SandBox:
                         for i in REfindall(a, r"<.+\..+>"):
                             # get object and key
                             obj, key = i[1:-1].split(".", 1)
-                            file = self.__files.get(obj, "dic/")[4:]
+                            file = self.__files.get(obj, "map/")[4:]
                         
                             # find value or default to the placeholder
                             t = i
@@ -177,8 +177,8 @@ class SandBox:
                                     return "[lib/]:"+file
                                 case "fnc/":
                                     return "[fnc/]:"+file
-                                case "dic/":
-                                    return "[dic/]:"+file
+                                case "map/":
+                                    return "[map/]:"+file
                                 case _:
                                     return "[    ]:"+file
                     def typeWithoutfile(file:str):
@@ -200,8 +200,8 @@ class SandBox:
                                     return "lib/"
                                 case "fnc/":
                                     return "fnc/"
-                                case "dic/":
-                                    return "dic/"
+                                case "map/":
+                                    return "map/"
                                 case _:
                                     return ""
                     v12v2={"try":"/try","for":"/for","thread":"/thread"}
@@ -308,9 +308,9 @@ class SandBox:
                                         else:
                                             addtochat(i)
                                             checkcommand(i)
-                                elif self.__files[a[11:]][:4]=="dic/":
+                                elif self.__files[a[11:]][:4]=="map/":
                                     for i in self.__files[a[11:]].split(";"):
-                                        if i[:4]=="dic/":
+                                        if i[:4]=="map/":
                                             addtochat(i[4:])
                                         else:
                                             addtochat(i)
@@ -434,7 +434,7 @@ class SandBox:
                             self.__files.setdefault(s[1],self.__files[s[0]])
                         elif a[:8]=="/replace":
                             args=a[9:].split(" ",2)
-                            addochat(args[2].replace(args[0],args[1]))
+                            addtochat(args[2].replace(args[0],args[1]))
                         elif a[:11]=="/file.copy[":
                             s=a[11:].split("]")
                             self.__files.setdefault(s[1],self.__files[s[0]])
