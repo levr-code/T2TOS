@@ -88,41 +88,6 @@ class SandBox:
                 def checkcommand(a:str,/,userss=False):
                     global mem,global_lib,global_var
                     print(f"{ip()} - checkcommand - {a}")
-                    if a.startswith("$") and "=" in a and "." in a:
-                        try:
-                            obj_key, value = a[1:].split("=", 1)  # split only at first '='
-                            obj, key = obj_key.split(".", 1)      # split object and key
-                    
-                            # create dic/ if missing
-                            if obj not in self.__files:
-                                self.__files[obj] = "dic/"
-                    
-                            # ensure it’s a dic/
-                            if not self.__files[obj].startswith("dic/"):
-                                checkcommand("/exit")
-                    
-                            # remove dic/ prefix and split fields
-                            file_content = self.__files[obj][4:]
-                            fields = file_content.split(";") if file_content else []
-                    
-                            # update or add the key
-                            updated = False
-                            for i, field in enumerate(fields):
-                                if field.split("%")[0] == key:
-                                    fields[i] = f"{key}%{value}"
-                                    updated = True
-                                    break
-                            if not updated:
-                                fields.append(f"{key}%{value}")
-                    
-                            # save back to dic/
-                            self.__files[obj] = "dic/" + ";".join(fields)
-                    
-                            # echo last chat output
-                            addtochat(self.__chat[-1])
-                    
-                        except Exception as e:
-                            addtochat(f"Error setting {a}: {e}")
 
                     QUOTES = [
                         "The best way to predict the future is to invent it. – Alan Kay",
