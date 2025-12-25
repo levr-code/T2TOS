@@ -133,14 +133,17 @@ class SandBox:
                             t=self.__history[int(i.split()[1][:-1])]
                             a=REplace1(a,i,t)
                         for i in REfindall(a, r"<dict .+ .+>"):
-                            file=self.__files[i.split()[0]][4:]
-                            key=i.split()[1][:-1]
+                            if file[4:]!="dic/":
+                                checkcommand("/exit")
+                            file = self.__files[i.split()[1]][4:]
+                            key = i.split()[2][:-1]
+                        
                             for j in file.split(";"):
-                                if j.split("%")[0]==key:
-                                    print("iteration")
-                                    t=j.split("%")[1]
+                                if j.split("%")[0] == key:
+                                    t = j.split("%")[1]
                                     break
-                            a=REplace1(a,i,t)
+                        
+                            a = REplace1(a, i, t)
                     for i in REfindall(a, r"<range \d+>"):
                         try:
                             print(i)
