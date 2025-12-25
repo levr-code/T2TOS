@@ -153,19 +153,6 @@ class SandBox:
                                 a = REplace1(a, i, self.__chat[-1])
                             else:
                                 a = REplace1(a, i, t)
-                        
-                        # AFTER object expansion, handle assignments
-                        if a.startswith("@") and "=" in a and "." in a:
-                            try:
-                                left, value = a[1:].split("=", 1)
-                                obj, key = left.split(".", 1)
-                                dic_set(obj, key, value)
-                                addtochat(value)
-                                return
-                            except Exception as e:
-                                raise RuntimeError(f"dic assignment error: {e}")
-
-
                     for i in REfindall(a, r"<range \d+>"):
                         try:
                             print(i)
