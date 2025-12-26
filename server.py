@@ -25,7 +25,7 @@ def hash_pw(p):
 def highlight_t2tos(text):
     import re
     from markupsafe import Markup
-    tokens = re.split(r'(\s+|[\[\]\(\)\{\}\$%;,@#|<>&]|\=| |com/|sys/|txt/|var/|lst/|lib/|map/|fnc/|:fails:)', text)
+    tokens = re.split(r'(\s+|[\[\]\(\)\{\}\$%;:,@#|<>&]|\=| |com/|sys/|txt/|var/|lst/|lib/|map/|fnc/|fails)', text)
     result = []
     i=0
     for t in tokens:
@@ -35,13 +35,13 @@ def highlight_t2tos(text):
             isvar=False
         if not t or t.isspace():
             result.append(t)
-        elif t.strip() in T2TOS_COMMANDS+[":fails:"]:
+        elif t.strip() in T2TOS_COMMANDS+["fails"]:
             result.append(f'<span class="t2tos-command">{t}</span>')
         elif isvar:
             result.append(f'<span class="t2tos-var">{t}</span>')
         elif t.strip().isdigit():
             result.append(f'<span class="t2tos-number">{t}</span>')
-        elif t in [';', '|', '@', "]","}",")","{","[","(","%","&","#"]:
+        elif t in [';', '|', '@', "]","}",")","{","[","(","%","&","#",":"]:
             result.append(f'<span class="t2tos-symbol">{t}</span>')
         elif t in ['random', 'chat', '>'] and tokens[i-1]=="<":
             result.append(f'<span class="t2tos-command">{t}</span>')
@@ -273,8 +273,6 @@ class SandBox:
                             addtochat(int(a[5:].split()[0])%int(a[5:].split()[1]))
                         elif a=="/chat.len":
                             addtochat(len(self.__chat))
-                        elif a=="/info":
-                            return redirect("/info")
                         elif a[0]=="$" and a.count("$")>=2:
                             s=a.split("$")
                             if s[1] in self.__files.keys() and self.__files[s[1]][:4]=="var/":
