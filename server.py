@@ -45,7 +45,7 @@ def highlight_t2tos(text):
             result.append(f'<span class="t2tos-symbol">{t}</span>')
         elif t in ['random', 'chat', '>'] and tokens[i-1]=="<":
             result.append(f'<span class="t2tos-command">{t}</span>')
-        elif t in ["com/","sys/","txt/","var/","lst/","fnc/","lib/"]:
+        elif t in ["com/","sys/","txt/","var/","lst/","fnc/","lib/","map/"]:
             result.append(f'<span class="t2tos-fileext">{t}</span>')
         else:
             # Keep everything else plain (for rendering to work)
