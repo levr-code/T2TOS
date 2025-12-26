@@ -273,6 +273,8 @@ class SandBox:
                             addtochat(int(a[5:].split()[0])%int(a[5:].split()[1]))
                         elif a=="/chat.len":
                             addtochat(len(self.__chat))
+                        elif a=="/info":
+                            return redirect("/info")
                         elif a[0]=="$" and a.count("$")>=2:
                             s=a.split("$")
                             if s[1] in self.__files.keys() and self.__files[s[1]][:4]=="var/":
