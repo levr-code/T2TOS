@@ -537,7 +537,7 @@ def a292():
 def a294():
     return redirect("/T2TOS")
 @app.route('/info')
-def a294():
+def a295():
     return render_template("syntax.html")
 @app.route('/T2TOS/logout')
 def a211():
