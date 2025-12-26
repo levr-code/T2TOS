@@ -552,7 +552,7 @@ def a293():
         return redirect("/T2TOS/login")
     return render_template("button.html",text="Your T2TOS run into a problem :(",button_name="back",button_href="/T2TOS")
 @app.route('/T2TOS')
-def a20():
+def a2000():
     if ip() not in sidname:
         return redirect("/T2TOS/login")
     return render_template("list.html",theme=sandboxes[sidname[ip()]].theme,chat=sandboxes[sidname[ip()]].chat,title=f"{sidname[ip()]}'s T2TOS",text=f"{sidname[ip()]}'s T2TOS")
